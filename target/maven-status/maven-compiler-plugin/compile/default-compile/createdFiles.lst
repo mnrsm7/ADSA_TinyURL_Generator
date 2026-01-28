@@ -1,0 +1,6 @@
+com\example\urlshortener\UrlShortenerApplication.class
+com\example\urlshortener\controller\UrlController.class
+com\example\urlshortener\util\Base62Encoder.class
+com\example\urlshortener\model\UrlMapping.class
+com\example\urlshortener\service\UrlService.class
+com\example\urlshortener\repository\UrlRepository.class
