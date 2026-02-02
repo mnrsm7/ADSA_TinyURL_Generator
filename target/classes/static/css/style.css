@@ -1,53 +1,340 @@
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background: #f4f6f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFF0E6 100%);
+    min-height: 100vh;
+    padding: 20px;
 }
 
-.container {
-    background: #fff;
-    padding: 30px;
-    width: 400px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+/* Navigation Bar */
+.navbar {
+    background: white;
+    padding: 0;
+    margin: 0 auto 30px;
+    max-width: 1200px;
+    border-radius: 12px;
+    display: flex;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.nav-link {
+    flex: 1;
+    padding: 18px 20px;
+    text-decoration: none;
     text-align: center;
+    color: #666;
+    font-weight: 600;
+    font-size: 16px;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: #f5f5f5;
+    color: #667eea;
+}
+
+.nav-link.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    background: #f9f9f9;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    padding: 40px;
+    min-height: 600px;
+}
+
+.section {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 h1 {
+    color: #333;
+    font-size: 32px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.subtitle {
+    color: #999;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+h3 {
+    color: #333;
+    margin: 20px 0 10px 0;
+    font-size: 18px;
+}
+
+/* Form Box */
+.form-box {
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 0 auto 30px;
+    border: 1px solid #eee;
+}
+
+.form-group {
     margin-bottom: 20px;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
 }
 
-button {
+input[type="text"],
+input[type="number"],
+select {
     width: 100%;
-    padding: 10px;
-    background: #007bff;
-    border: none;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Buttons */
+.btn-large {
+    width: 100%;
+    padding: 14px 20px;
+    background: #667eea;
     color: white;
+    border: none;
+    border-radius: 6px;
     font-size: 16px;
-    border-radius: 4px;
+    font-weight: 600;
     cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
 }
 
-button:hover {
-    background: #0056b3;
+.btn-large:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
 }
 
-.result {
+.btn-large:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    padding: 12px 20px;
+    background: #764ba2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-secondary:hover {
+    background: #63408b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+}
+
+.btn-secondary:active {
+    transform: translateY(0);
+}
+
+/* Analytics Grid */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.analytics-card {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    border-left: 4px solid #667eea;
+}
+
+.analytics-card h3 {
+    color: #667eea;
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.analytics-card p {
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+/* Result Boxes */
+.result,
+.result-box {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f0f8ff;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    min-height: auto;
+}
+
+.result.success {
+    background: #f0f8f4;
+    border-left-color: #28a745;
+}
+
+.result-box {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+table th {
+    background: #667eea;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+table tr:hover {
+    background: #f9f9f9;
+}
+
+table small {
+    color: #666;
+    font-size: 12px;
+}
+
+/* Links and Text */
+a {
+    color: #667eea;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.highlight {
+    background: #fff3cd;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    color: #333;
+}
+
+p {
+    color: #666;
+    line-height: 1.6;
+    margin: 8px 0;
+}
+
+strong {
+    color: #333;
+    font-weight: 600;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .form-box {
+        padding: 20px;
+    }
+
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    table th, table td {
+        padding: 8px;
+    }
+
+    .navbar {
+        margin-bottom: 20px;
+    }
+
+    .nav-link {
+        padding: 15px 10px;
+        font-size: 14px;
+    }
+}
     margin-top: 20px;
     word-break: break-all;
 }

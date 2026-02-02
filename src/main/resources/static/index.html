@@ -4,22 +4,103 @@
     <meta charset="UTF-8">
     <title>URL Shortener</title>
     <link rel="stylesheet" href="/css/style.css">
-
 </head>
 <body>
 
+<div class="navbar">
+    <a href="#" onclick="showSection('shorten'); return false;" class="nav-link active" id="nav-shorten">🔗 Shorten URL</a>
+    <a href="#" onclick="showSection('analytics'); return false;" class="nav-link" id="nav-analytics">📊 Analytics</a>
+</div>
+
 <div class="container">
-    <h1>🔗 URL Shortener</h1>
+    <!-- SHORTEN URL SECTION -->
+    <div id="section-shorten" class="section active">
+        <h1>🔗 URL Shortener</h1>
+        <p class="subtitle">Convert your long URLs to short, shareable links</p>
+        
+        <div class="form-box">
+            <div class="form-group">
+                <label for="longUrl">Your Long URL:</label>
+                <input 
+                    type="text" 
+                    id="longUrl" 
+                    placeholder="https://example.com/very/long/url"
+                >
+            </div>
 
-    <input 
-        type="text" 
-        id="longUrl" 
-        placeholder="Enter your long URL here..."
-    >
+            <div class="form-group">
+                <label for="expiration">Expiration Time (Optional):</label>
+                <select id="expiration" onchange="toggleCustomExpiry()">
+                    <option value="">Never Expires</option>
+                    <option value="1h">1 Hour</option>
+                    <option value="24h">24 Hours</option>
+                    <option value="7d">7 Days</option>
+                    <option value="30d">30 Days</option>
+                    <option value="custom">Custom Time</option>
+                </select>
+            </div>
 
-    <button onclick="shortenUrl()">Shorten URL</button>
+            <div class="form-group" id="customExpiryGroup" style="display:none;">
+                <label for="customTime">Custom Expiration (e.g., 72h, 14d, 120m):</label>
+                <input 
+                    type="text" 
+                    id="customTime" 
+                    placeholder="e.g., 72h, 14d, 120m"
+                >
+            </div>
 
-    <div id="result" class="result"></div>
+            <button class="btn-large" onclick="shortenUrl()">Create Short URL</button>
+        </div>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <!-- ANALYTICS SECTION -->
+    <div id="section-analytics" class="section">
+        <h1>📊 Analytics Dashboard</h1>
+        <p class="subtitle">Track and analyze your shortened URLs</p>
+        
+        <div class="analytics-grid">
+            <!-- Get Single URL Analytics -->
+            <div class="analytics-card">
+                <h3>URL Analytics</h3>
+                <p>View detailed stats for a specific URL</p>
+                <div class="form-group">
+                    <input 
+                        type="text" 
+                        id="analyticsCode" 
+                        placeholder="Enter short code (e.g., abc)"
+                    >
+                    <button class="btn-secondary" onclick="getUrlAnalytics()">View Analytics</button>
+                </div>
+                <div id="analyticsResult" class="result-box"></div>
+            </div>
+
+            <!-- Top URLs -->
+            <div class="analytics-card">
+                <h3>Top 10 URLs</h3>
+                <p>Your most popular shortened URLs</p>
+                <button class="btn-secondary" onclick="getTopUrls()">Load Top URLs</button>
+                <div id="topUrlsResult" class="result-box"></div>
+            </div>
+
+            <!-- Active URLs -->
+            <div class="analytics-card">
+                <h3>All Active URLs</h3>
+                <p>List of all non-expired URLs</p>
+                <button class="btn-secondary" onclick="getAllActiveUrls()">Load Active URLs</button>
+                <div id="activeUrlsResult" class="result-box"></div>
+            </div>
+
+            <!-- History -->
+            <div class="analytics-card">
+                <h3>Creation History</h3>
+                <p>Recent URL shortening operations (Stack)</p>
+                <button class="btn-secondary" onclick="getUrlHistory()">Load History</button>
+                <div id="historyResult" class="result-box"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="/js/script.js"></script>
