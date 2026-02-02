@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @Service
 public class UrlService {
@@ -37,7 +39,37 @@ public class UrlService {
      * Shorten a URL with expiration date
      */
     public String shortenUrlWithExpiration(String longUrl, LocalDateTime expiresAt) {
-        String shortCode = Base62Encoder.encode(longUrl.hashCode());
+        // Use SHA-256, truncate to first 6 bytes (48 bits) and encode to Base62
+        String shortCode = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            // Try a few attempts to avoid collisions by appending attempt counter
+            for (int attempt = 0; attempt < 8; attempt++) {
+                byte[] digest = md.digest((longUrl + (attempt == 0 ? "" : ":" + attempt)).getBytes());
+                long truncated = 0L;
+                // take first 6 bytes -> 48 bits
+                for (int i = 0; i < 6; i++) {
+                    truncated = (truncated << 8) | (digest[i] & 0xFFL);
+                }
+                // ensure positive
+                truncated = truncated & 0xFFFFFFFFFFFFL;
+
+                String candidate = Base62Encoder.encode(truncated);
+                var existing = repository.findByShortCode(candidate);
+                if (existing.isEmpty()) {
+                    shortCode = candidate;
+                    break;
+                }
+            }
+        } catch (NoSuchAlgorithmException e) {
+            // fallback to original hashCode if SHA-256 unavailable
+            shortCode = Base62Encoder.encode(longUrl.hashCode());
+        }
+
+        if (shortCode == null) {
+            // last resort: use hashCode
+            shortCode = Base62Encoder.encode(longUrl.hashCode());
+        }
 
         UrlMapping mapping = new UrlMapping();
         mapping.setShortCode(shortCode);
