@@ -20,12 +20,11 @@ public class UrlService {
 
     private final UrlRepository repository;
     private final UrlAccessLogRepository accessLogRepository;
-    private final URLHistoryStack historyStack;
+    private static final URLHistoryStack historyStack = new URLHistoryStack();
 
     public UrlService(UrlRepository repository, UrlAccessLogRepository accessLogRepository) {
         this.repository = repository;
         this.accessLogRepository = accessLogRepository;
-        this.historyStack = new URLHistoryStack();
     }
 
     /**

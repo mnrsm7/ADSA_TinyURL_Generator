@@ -230,7 +230,8 @@ async function getUrlHistory() {
             throw new Error("Failed to fetch history");
         }
 
-        const data = response.json();
+        const data = await response.json();
+        console.log("History API Response:", data); // Debug log
 
         if (data.historySize === 0) {
             resultDiv.innerHTML = "<p>📭 No history available</p>";
@@ -243,20 +244,24 @@ async function getUrlHistory() {
         `;
 
         if (data.history && data.history.length > 0) {
-            html += '<table><tr><th>#</th><th>Code</th><th>Created</th></tr>';
+            html += '<table><tr><th>#</th><th>Code</th><th>Original URL</th><th>Created</th></tr>';
             data.history.forEach((entry, index) => {
                 html += `<tr>
                     <td>${index + 1}</td>
                     <td><strong>${entry.shortCode}</strong></td>
+                    <td><small>${entry.originalUrl}</small></td>
                     <td><small>${new Date(entry.timestamp).toLocaleString()}</small></td>
                 </tr>`;
             });
             html += '</table>';
+        } else {
+            html += '<p>No entries in history list</p>';
         }
 
         resultDiv.innerHTML = html;
     } catch (error) {
         resultDiv.innerHTML = `<p style='color:red;'>❌ Error: ${error.message}</p>`;
+        console.error("History fetch error:", error);
     }
 }
 
