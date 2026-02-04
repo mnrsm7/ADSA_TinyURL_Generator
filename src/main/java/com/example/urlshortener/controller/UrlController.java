@@ -5,6 +5,7 @@ import com.example.urlshortener.service.UrlService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -63,7 +64,7 @@ public class UrlController {
     public ResponseEntity<Void> redirect(@PathVariable String code,
                                          @RequestHeader(value = "User-Agent", defaultValue = "Unknown") String userAgent,
                                          @RequestHeader(value = "Referer", defaultValue = "") String referer,
-                                         @RequestParam(value = "ip", defaultValue = "") String clientIp) {
+                                         HttpServletRequest request) {
 
         UrlMapping mapping = service.getOriginalUrl(code);
 
@@ -71,12 +72,42 @@ public class UrlController {
             return ResponseEntity.notFound().build();
         }
 
+        // Extract client IP from request
+        String clientIp = getClientIpAddress(request);
+        
         service.incrementClick(mapping, userAgent, clientIp, referer);
 
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .location(URI.create(mapping.getOriginalUrl()))
                 .build();
+    }
+
+    // Helper method to extract client IP address
+    private String getClientIpAddress(HttpServletRequest request) {
+        // Check for IP from proxy headers first
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            // X-Forwarded-For can contain multiple IPs, get the first one
+            return xForwardedFor.split(",")[0].trim();
+        }
+        
+        String xRealIp = request.getHeader("X-Real-IP");
+        if (xRealIp != null && !xRealIp.isEmpty()) {
+            return xRealIp;
+        }
+        
+        // Fallback to remote address
+        String remoteAddr = request.getRemoteAddr();
+        
+        // Normalize IPv6 loopback to IPv4 format
+        if (remoteAddr != null) {
+            if ("0:0:0:0:0:0:0:1".equals(remoteAddr) || "::1".equals(remoteAddr)) {
+                return "127.0.0.1";
+            }
+        }
+        
+        return remoteAddr != null ? remoteAddr : "Unknown";
     }
 
     // 🔹 Get analytics for a specific URL
